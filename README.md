@@ -14,9 +14,9 @@ GQL 服务可以开放在 Restful api 下，不过其逻辑并不依赖任何平
 
 ```
 {
-  user {
-    name
-  }
+    user {
+        name
+    }
 }
 ```
 
@@ -24,11 +24,11 @@ GQL 服务可以开放在 Restful api 下，不过其逻辑并不依赖任何平
 
 ```json
 {
-  "data": {
-    "user": {
-        "name": "高厉害"
+    "data": {
+        "user": {
+            "name": "高厉害"
+        },
     }
-  }
 }
 ```
 
