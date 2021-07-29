@@ -1,4 +1,4 @@
-# 使用 express 构建简单 GraphQL 接口
+# 在 Node.js 平台简单构建 GraphQL 接口
 
 ## GQL
 
@@ -584,6 +584,44 @@ new GraphQLObjectType({
 
 
 
+## 突变类型 mutation
+
+读者可能已经注意到了，如果我们在 `query` 逻辑中对持久化存储（数据库等）做了修改，甚至是直接提供 `createAccount` 、`deleteUser` 这样的字段，也不会怎么样。
+
+实际上这完全可以实现"删改查"，只不过官方更推荐使用另一个语义化的词  `mutation`。
+
+只需要把 `query` 改为 `mutation` 即可。
+
+```js
+const {
+    GraphQLObjectType,
+    GraphQLSchema,
+    GraphQLString,
+    GraphQLNonNull,
+} = require('graphql');
+
+const schema = new GraphQLSchema({
+    mutation: new GraphQLObjectType({
+        name: 'mutationType',
+        fields: {
+            createUser: {
+                type: UserType,
+                args: {
+                    username: { type: new GraphQLNonNull(GraphQLString) },
+                    age: { type: new GraphQLNonNull(GraphQLInt)}
+                },
+                resolve: (source, args, context, info) => {
+                    db.insert(/* inserted value */);
+                    return db.findById(args.id);
+                }
+            },
+        }
+    }),
+});
+```
+
+
+
 ## 使用`express-graphql`
 
 我们是如何让 GQL 与 express 交互的？
@@ -667,3 +705,12 @@ graphql(
 ): Promise<GraphQLResult>
 ```
 
+
+
+
+
+## 例子
+
+一个博客后端 -> [https://github.com/Drincann/blog](https://github.com/Drincann/blog)
+
+技术栈 mongodb graphql koa
